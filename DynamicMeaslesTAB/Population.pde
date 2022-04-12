@@ -25,5 +25,6 @@ void population() {
   yNose2 = faceY ;
   xNose3 = faceX + leftEyeY*1/2;
   yNose3 = faceY ;
+  
   //
 }//End population
