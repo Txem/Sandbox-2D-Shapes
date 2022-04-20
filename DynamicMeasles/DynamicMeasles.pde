@@ -5,6 +5,11 @@ float faceX, faceY, faceDiameter;
 float leftEyeX, leftEyeY, rightEyeX, rightEyeY, eyeDiameter; 
 float mouthX1, mouthY1, mouthX2, mouthY2;
 float xNose1, yNose1, xNose2, yNose2, xNose3, yNose3;
+float faceRectX, faceRectY;
+float quitButtonX, quitButtonY, quitButtonWidth, quitButtonHeight;
+String quitbutton = "Quitbutton";
+PFont titleFont;
+color green=#39C5BB, resetDefaultInk=#FFFFFF;
 //
 void setup() 
 {
@@ -58,13 +63,21 @@ if ( orientation=="Landscape or Square" ) {
   xNose2 = faceX - leftEyeY*1/2;
   yNose2 = faceY ;
   xNose3 = faceX + leftEyeY*1/2;
-  yNose3 = faceY ;
+  yNose3 = faceY; 
+  quitButtonX = displayWidth*1/20; //1/4 on one-half, 1/4 on other half
+  quitButtonY = displayHeight*1/20;
+  quitButtonWidth = displayWidth*1/6;
+  quitButtonHeight = displayHeight*1/6;
+  
   //
+  //quitButton
+
   //Face: Circle = Inscribing a Circle in a Square
   //Center a circle on display orientation
   ellipse(faceX, faceY, faceDiameter, faceDiameter);
   //
-  
+  titleFont = createFont("Century", 55);
+  rect (quitButtonX, quitButtonY, quitButtonWidth, quitButtonHeight);
 }//End setup
 
 void draw() 
@@ -72,8 +85,10 @@ void draw()
   //Measle
   float measleDiameter = random( smallerDisplayDimesion*1/100, smallerDisplayDimesion*1/25); //Range of measle size: small=*1/100, large=4xbigger (*1/25)
   float measleRadius = measleDiameter*1/2;
-  float measleX = random( rectFaceX+measleRadius, (( rectFaceX+rectFaceWidth ) - measleRadius ) );
-  float measleY = random( rectFaceY+measleRadius, (( rectFaceY+rectFaceHeight ) - measleRadius ) );
+  float faceRectX =rectFaceX+measleRadius*2;
+  float faceRectY =leftEyeY+eyeDiameter*1/2+measleRadius;
+  float measleX = random( faceRectX, (( rectFaceX+rectFaceWidth ) - measleRadius*2 ) );
+  float measleY = random( faceRectY, (mouthY1-mouthOpen*1/2) - measleRadius*2); 
   Boolean nightMode=false; //Note: IF-ELSE similar to ternary operator
   //color red=#FF0000, measleColour=red, whiteReset=#000000; //Note: need range here too
   color measleColour = ( nightMode==false ) ? color( 255, random(0, 50), random(120) ) : color( 255, random(0, 50), 0 ) ; //ternary operator for day:night
@@ -95,16 +110,30 @@ void draw()
   triangle(xNose1, yNose1, xNose2, yNose2, xNose3, yNose3);
   //
   //Mouth
+  //PImage pic1 = loadImage("mouth.jpg");
+  //rect(mouthX1-mouthHeight*1/2, mouthY1-mouthHeight*1/2, mouthWidth+mouthOpen, mouthHeight);
   strokeWeight(mouthOpen); //testing: 100=400/4, mouthOpen=height*1/4
   line(mouthX1, mouthY1, mouthX2, mouthY2);
+  //image(pic1, mouthX1+smallerDisplayDimesion*1/12, mouthY1-mouthOpen*1/2);
   strokeWeight(reset); //reset to 1 pixel
+  //comparison rect() line only, no caps, no strokeWeight
+  //rect(mouthX1, mouthY1, mouthWidth, mouthHeight); 
   //
+  fill(green);
+  textAlign(CENTER, CENTER); 
+  textFont(titleFont, 45); 
+  text(quitbutton, quitButtonX, quitButtonY, quitButtonWidth, quitButtonHeight );
+  fill(resetDefaultInk);
 }//End draw
 //
+
+
+//Not night mode compatible, must change 
 void keyPressed() {
 }//End keyPressed
 //
 void mousePressed() {
+  if (mouseX>quitButtonX && mouseX<quitButtonX+quitButtonWidth && mouseY>quitButtonY && mouseY<quitButtonY+quitButtonHeight) exit();
 }//End mousePressed 
 //
 //End Main Program 
